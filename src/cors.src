@@ -77,8 +77,8 @@
 	</div>
 
 
-	<h2>XSS Form:</h2>
-	<form action="/csrfPostForm" method="post">
+	<h2>JSON Based XSS Form:</h2>
+	<form>
 	  <label for="fname">First name:</label>
 	  <input type="text" id="fname" name="fname"><br><br>
 	  <label for="lname">Last name:</label>
@@ -86,6 +86,35 @@
 	  <input type="submit" value="Submit">
 	</form>
 
+	<script>
+		async function handleSubmit(events)
+		{
+			event.preventDefault();
+			const formData  = new FormData(event.target);
+			const firstName = formData.get('fname');
+			const lastName  = formData.get('lname');
+
+			console.log("Got form submit: "  + firstName + " " + lastName);
+
+			const object = {fname: firstName, lname: lastName};
+
+			const response = await fetch('/corsPost', {
+				method: 'POST',
+				body: JSON.stringify(object),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+		}
+
+		const form = document.querySelector('form');
+		form.addEventListener('submit', handleSubmit);
+
+	</script>
+
+
+	<!-- Handle nice collapse stuff for tutorial -->
 	<script>
 	var coll = document.getElementsByClassName("collapsible");
 	var i;
