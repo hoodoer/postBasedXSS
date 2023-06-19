@@ -110,6 +110,17 @@ def corsPage():
 	return response
 
 
+@app.route('/corsPost', methods=['POST'])
+def receiveCORSPost():
+	firstName = request.form['fname']
+	lastName = request.form['lname']
+	print("Got names: " + firstName + ' ' + lastName)
+	response = make_response('<h1>Welcome!</h1><p>' + firstName + ' ' + lastName + 
+		'</p><br><a href="javascript:history.back()">Go Back</a>', 200)
+
+	return response
+
+
 
 if __name__ == '__main__':
 	printHeader()

@@ -35,26 +35,35 @@
 </style>
 </head>
 <body>
-	<Title>XSS Lab - CSRF</Title>
+	<Title>XSS Lab - CORS</Title>
 	<h1>POST Based XSS Lab - CORS</h1>
-	<p>Lab to demonstrate using a CORS vulnerability to exploit reflected post based XSS.</p>
+	<p>Lab to demonstrate using CORS vulnerability to exploit reflected post based XSS.</p>
 
 	<p><a href="/">Home</a></p>
 
 	<button type="button" class="collapsible">Open Tutorial</button>
 	<div class="content">
-		<p>When you fill out the form and submit it, the form is submitted using a POST request.<br>
-		The inputs are reflected in the response, so you can submit a name such as <br>
-		<b>Joe&lt;script&gt;alert(1)&lt;/script&gt;</b><br>
-		and the page will pop open an alert box, indicating an XSS vulnerability.<br><br>
-		The issue with POST based reflected XSS vulnerabilities is that they're hard to exploit.<br>
-		I would need to convince a user to type the payload into the form and submit it to get my payload running.<br><br>
-		That is not a very practical exploit path. <br><br>
-		Unlike the <b>Method Tampering</b> tutorial, this endpoint specificaly requires the <br>
-		submission to be a POST request. <br><br>
-		We can still exploit this POST XSS vulnerability by crafting<br>
-		a CSRF attack to submit our payload. The form POST in question does <b>not</b> implement anti-CSRF tokens<br>
-		so it is vulnerable to traditional CSRF attacks. We can use a CSRF attack to submit our XSS payload<br><br>
+		<p>Unlike the prior two tutorials where a form POST allowed us to send our XSS payload, <br>
+		many applications send user inputs to the server in JSON. An HTML form cannot generate JSON<br>
+		so form based attacks will not work here. To create valid JSON we need JavaScript. We have<br>
+		quite the chicken and egg problem here, we can't inject our malicious JavaScript without JSON<br>
+		which we can't generate without... JavaScript.<br><br>
+		Enter CORS vulnerabilities.<br><br>
+		CORS or Cross-Origin Resource Sharing is a method to selectively reduce application security<br>
+		by permitting third-party sites to use JavaScript againt your own application. <br>
+		By default browsers will not let JavaScript on one site create requests to another site. <br>
+		Some sites set a too lenient CORS policy, or dynamically generate one based on the <b>Origin</b> header.<br><br>
+		I like to think of CORS vulnerabilities as "XSS Lite". You can still use malicious JavaScript against<br>
+		the application, often retrieving sensitive information, but there are limitations compared to a full<br>
+		blown XSS vulnerability. <br><br>
+		For example, CORS JavaScript cannot access the application local storage, where API keys might be stored.<br>
+		Full XSS would allow for malicious JavaScript that can read local storage of the web application.<br><br>
+		If you have a POST based XSS using JSON, and a CORS vulnerability you can use a CORS attack to <br>
+		inject your XSS payload. Essentially bootstrapping your XSS with a CORS vulnerability to get<br>
+		more powerful malicious JavaScript capabilities.<br>
+
+
+
 
 		The easiest way to craft this attack is again getting our form POST request into Burp.<br>
 		<image src="./static/csrfFormPost1.png"><br>
