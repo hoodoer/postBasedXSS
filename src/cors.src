@@ -104,7 +104,15 @@
 				headers: {
 					'Content-Type': 'application/json'
 				}
+			}).then(response=>response.text()).then(data=>
+			{
+				console.log(data)
+				var newDiv = document.createElement("p");
+  				var newContent = document.createTextNode(data);
+  				newDiv.appendChild(newContent);
+  				document.body.appendChild(newDiv);
 			});
+
 
 		}
 
