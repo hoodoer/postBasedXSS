@@ -69,7 +69,8 @@ def receiveForm():
 	firstName = request.values['fname']
 	lastName = request.values['lname']
 	print("Got names: " + firstName + ' ' + lastName)
-	response = make_response('<h1>Welcome!</h1><p>' + firstName + ' ' + lastName + '</p>', 200)
+	response = make_response('<h1>Welcome!</h1><p>' + firstName + ' ' + lastName + 
+		'</p><br><a href="javascript:history.back()">Go Back</a>', 200)
 
 	return response
 
@@ -82,6 +83,17 @@ def csrfPage():
 		page = file.read()
 		response = make_response(page, 200)
 		response.mimetype = 'text/html'
+
+	return response
+
+
+@app.route('/csrfPostForm', methods=['POST'])
+def receiveCSRFForm():
+	firstName = request.form['fname']
+	lastName = request.form['lname']
+	print("Got names: " + firstName + ' ' + lastName)
+	response = make_response('<h1>Welcome!</h1><p>' + firstName + ' ' + lastName + 
+		'</p><br><a href="javascript:history.back()">Go Back</a>', 200)
 
 	return response
 

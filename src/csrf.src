@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+	/* Style the button that is used to open and close the collapsible content */
+	.collapsible {
+	  background-color: #eee;
+	  color: #444;
+	  cursor: pointer;
+	  padding: 18px;
+	  width: 100%;
+	  border: none;
+	  text-align: left;
+	  outline: none;
+	  font-size: 15px;
+	}
+
+	/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+	.active, .collapsible:hover {
+	  background-color: #ccc;
+	}
+
+	/* Style the collapsible content. Note: hidden by default */
+	.content {
+	  padding: 0 18px;
+	  display: none;
+	  overflow: hidden;
+	  background-color: #f1f1f1;
+	}
+
+	img {
+  		border: 3px solid #555;
+	}
+
+</style>
+</head>
+<body>
+	<Title>XSS Lab - CSRF</Title>
+	<h1>POST Based XSS Lab - CSRF</h1>
+	<p>Lab to demonstrate using Cross-Site Request Forgery attack to exploit reflected post based XSS.</p>
+
+	<p><a href="/">Home</a></p>
+
+	<button type="button" class="collapsible">Open Tutorial</button>
+	<div class="content">
+		<p>When you fill out the form and submit it, the form is submitted using a POST request.<br>
+		The inputs are reflected in the response, so you can submit a name such as <br>
+		<b>Joe&lt;script&gt;alert(1)&lt;/script&gt;</b><br>
+		and the page will pop open an alert box, indicating an XSS vulnerability.<br><br>
+		The issue with POST based reflected XSS vulnerabilities is that they're hard to exploit.<br>
+		I would need to convince a user to type the payload into the form and submit it to get my payload running.<br><br>
+		That is not a very practical exploit path. <br><br>
+		Unlike the <b>Method Tampering</b> tutorial, this endpoint specificaly requires the <br>
+		submission to be a POST request. <br><br>
+		We can still exploit this POST XSS vulnerability by crafting<br>
+		a CSRF attack to submit our payload. The form POST in question does <b>not</b> implement anti-CSRF tokens<br>
+		so it is vulnerable to traditional CSRF attacks. We can use a CSRF attack to submit our XSS payload<br><br>
+
+		The easiest way to craft this attack is again getting our form POST request into Burp.<br>
+		<image src="./static/csrfFormPost1.png"><br>
+		Right click on the request, select <b>Engagement tools</b> and then <b>Generate CSRF PoC</b><br>
+		<image src="./static/csrfPocGeneration1.png"><br>
+		<image src="./static/poc1.png"><br>
+
+		Burp suite (pro version at least) will generate a CSRF webpage that will submit the malicious<br>
+		XSS payload for you as a POST request.<br>
+	</p>
+	</div>
+
+
+	<h2>XSS Form:</h2>
+	<form action="/csrfPostForm" method="post">
+	  <label for="fname">First name:</label>
+	  <input type="text" id="fname" name="fname"><br><br>
+	  <label for="lname">Last name:</label>
+	  <input type="text" id="lname" name="lname"><br><br>
+	  <input type="submit" value="Submit">
+	</form>
+
+	<script>
+	var coll = document.getElementsByClassName("collapsible");
+	var i;
+
+	for (i = 0; i < coll.length; i++) {
+	  coll[i].addEventListener("click", function() {
+	    this.classList.toggle("active");
+	    var content = this.nextElementSibling;
+	    if (content.style.display === "block") {
+	      content.style.display = "none";
+	    } else {
+	      content.style.display = "block";
+	    }
+	  });
+	}
+	</script>
+
+</body>
+</html>
