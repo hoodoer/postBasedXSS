@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<Title>XSS Lab</Title>
+	<h1>POST Based XSS Lab</h1>
+	<p>Lab to demonstrate ways to make reflected POST based XSS
+	Exploitable.</p>
+
+	<p><a href="/methodTamper">1 - Method Tampering</a></p>
+	<p><a href="/csrf">2 - CSRF</a></p>
+	<p><a href="/cors">3 - CORS</a></p>
+	<p><a href="/fakeJson">4 - Fake JSON CSRF</a></p>
+
+
+</body>
+</html>
