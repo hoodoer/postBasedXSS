@@ -48,25 +48,28 @@
 	    but I have seen this and exploited it before on client engagements. <br><br>
 
 		Unlike the prior two tutorials where a form POST allowed us to send our XSS payload, <br>
-		many applications send user inputs to the server in JSON. An HTML form cannot generate JSON<br>
+		many applications send user inputs to the server in JSON. An HTML form cannot generate JSON,<br>
 		so form based attacks will not work here. To create valid JSON we need JavaScript. We have<br>
 		quite the chicken and egg problem here, we can't inject our malicious JavaScript without JSON<br>
 		which we can't generate without... JavaScript.<br><br>
 
-		Or maybe we can come close. The big dependency for this attack to work is that the<br>
-		server endpoint receiving the JSON POST is not enforcing the content-type as it should.<br><br>
+		Or maybe we can come close enough to fool the server. The big dependency for this attack to work is that the<br>
+		server endpoint receiving the JSON POST is <b>not enforcing</b> the content-type as it should.<br><br>
 
 		In a typical JSON POST, the JavaScript creating that POST will set the content-type to <br><b>application/json</b><br><br>
 
 		We can use a traditional form based CSRF attack to create JSON-ish looking inputs, but we can't change <br>
-		the content-type without JavaScript, which we're not allowed to do on our third-party CSRF attack<br>
+		the content-type to application/json without JavaScript, which we're not allowed to do on our third-party CSRF attack<br>
 		website in anyway that will interact with another site. <br><br>
 
 		So this attack will only work against a JSON POST endpoint that processes the JSON input<br>
-		even if the content-type is wrong, specifically using the content-type of <br><b>application/x-www-form-urlencoded</b><br><br>
+		even if the content-type is wrong, specifically using the content-type of <br>
+		<b>application/x-www-form-urlencoded</b><br>
+		or<br>
+		<b>text/plain</b><br><br>
 
-		It should be rare to find such a configuration. But you do, you can then configure <br>
-		your form post so that it sends <i>almost</i> JSON. Let's look at a normal form POST<br>
+		It should be rare to find such a configuration. But when you do, you can then configure <br>
+		your form post so that it sends <i>almost</i> JSON. Let's look at a normal HTML form POST<br>
 
 		<image src="./static/formPost1.png"><br><br><br>
 
@@ -74,7 +77,7 @@
 
 		<image src="./static/jsonPost1.png"><br><br><br>
 		We can see the formatting of the parameters is quite different from a traditional<br>
-		form POST. We can almost perfectly reproduce this in a form POST however. <br>
+		HTML form POST. We can almost perfectly reproduce this in a form POST however. <br>
 		We can do this by putting the entire content of our desired JSON in the parameter name<br>
 		and leaving the value field empty. And only sending a single parameter.<br><br>
 		This attack POC looks similar to the following:<br>
