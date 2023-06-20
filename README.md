@@ -1,11 +1,10 @@
 # postBasedXSS
-Demo of various ways to exploit post based reflected XSS
+Demo of some ways to practically exploit post based reflected XSS
 
 
 
 Requirements:
 flask
-flask-cors
 
 
 

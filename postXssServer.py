@@ -115,7 +115,8 @@ def receiveCORSPost():
 	firstName = request.json.get('fname')
 	lastName = request.json.get('lname')
 	print("Got names: " + firstName + ' ' + lastName)
-	response = make_response('Welcome ' + firstName + ' ' + lastName, 200)
+	response = make_response('Welcome ' + firstName + ' ' + lastName + 
+		'<br><a href="javascript:history.back()">Go Back</a>', 200)
 
 	return response
 

@@ -30,6 +30,7 @@
 
 	img {
   		border: 3px solid #555;
+  		width: 80vw;
 	}
 
 </style>

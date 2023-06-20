@@ -30,6 +30,7 @@
 
 	img {
   		border: 3px solid #555;
+  		width: 80vw;
 	}
 
 </style>
@@ -49,24 +50,51 @@
 		quite the chicken and egg problem here, we can't inject our malicious JavaScript without JSON<br>
 		which we can't generate without... JavaScript.<br><br>
 		Enter CORS vulnerabilities.<br><br>
-		CORS or Cross-Origin Resource Sharing is a method to selectively reduce application security<br>
+		CORS or Cross-Origin Resource Sharing is a method to selectively <b>reduce</b> application security<br>
 		by permitting third-party sites to use JavaScript againt your own application. <br>
 		By default browsers will not let JavaScript on one site create requests to another site. <br>
 		Some sites set a too lenient CORS policy, or dynamically generate one based on the <b>Origin</b> header.<br><br>
 		I like to think of CORS vulnerabilities as "XSS Lite". You can still use malicious JavaScript against<br>
-		the application, often retrieving sensitive information, but there are limitations compared to a full<br>
-		blown XSS vulnerability. <br><br>
+		the application in a CORS vulnerability, often retrieving sensitive information, <br>but there are limitations compared to a full blown XSS vulnerability. <br><br>
 		For example, CORS JavaScript cannot access the application local storage, where API keys might be stored.<br>
 		Full XSS would allow for malicious JavaScript that can read local storage of the web application.<br><br>
 		If you have a POST based XSS using JSON, and a CORS vulnerability you can use a CORS attack to <br>
 		inject your XSS payload. Essentially bootstrapping your XSS with a CORS vulnerability to get<br>
-		more powerful malicious JavaScript capabilities.<br>
+		more powerful malicious JavaScript capabilities.<br><br>
+
+		We can start building up our malicious third-party site with some basic HTML code:<br><br>
+
+		<textarea disabled rows="10" cols="75">
+<!DOCTYPE html>
+<html>
+	<body>
+		<title>CORS-XSS Attack</title>
+		<h1>CORS POC to trigger POST based XSS</h1>
+	</body>
+</html>
+		</textarea>
+		<br>
+		Save this code to an .html file and open it in your browser. You should see the following:<br>
+		<image src="./static/corsPoc1.png"><br>
+
+		Now we need to determine what the JSON POST request looks like that can deliver<br>
+		our malicious JavaScript payload. We can pull this from Burp. <br>
+		Once we know what the request looks like, we can write JavaScript on our<br>
+		malicious third-party site to make the request for us. <br><br>
+
+		The POST request with JSON looks like the following:
+		<image src="./static/jsonPost1.png"><br>
+
+
+
+		<br><br>
+		**********************
 
 
 
 
 		The easiest way to craft this attack is again getting our form POST request into Burp.<br>
-		<image src="./static/csrfFormPost1.png"><br>
+		<image src="./static/corsPoc1.png"><br>
 		Right click on the request, select <b>Engagement tools</b> and then <b>Generate CSRF PoC</b><br>
 		<image src="./static/csrfPocGeneration1.png"><br>
 		<image src="./static/poc1.png"><br>
