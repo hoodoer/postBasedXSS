@@ -51,7 +51,7 @@
 		The issue with POST based reflected XSS vulnerabilities is that they're hard to exploit.<br>
 		I would need to convince a user to type the payload into the form and submit it to get my payload running.<br><br>
 		That is not a very practical exploit path. <br><br>
-		Unlike the <b>Method Tampering</b> tutorial, this endpoint specificaly requires the <br>
+		Unlike the <b>Method Tampering</b> tutorial, this endpoint specifically requires the <br>
 		submission to be a POST request. <br><br>
 		We can still exploit this POST XSS vulnerability by crafting<br>
 		a CSRF attack to submit our payload. The form POST in question does <b>not</b> implement anti-CSRF tokens<br>
