@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from flask import Flask, make_response, request, jsonify
+from flask import Flask, make_response, request, jsonify, json
 
 
 app = Flask(__name__)
@@ -66,7 +66,6 @@ def methodForm():
 def receiveForm():
 	firstName = request.values['fname']
 	lastName = request.values['lname']
-	print("Got names: " + firstName + ' ' + lastName)
 	response = make_response('<h1>Welcome!</h1><p>' + firstName + ' ' + lastName + 
 		'</p><br><a href="javascript:history.back()">Go Back</a>', 200)
 
@@ -89,7 +88,6 @@ def csrfPage():
 def receiveCSRFForm():
 	firstName = request.form['fname']
 	lastName = request.form['lname']
-	print("Got names: " + firstName + ' ' + lastName)
 	response = make_response('<h1>Welcome!</h1><p>' + firstName + ' ' + lastName + 
 		'</p><br><a href="javascript:history.back()">Go Back</a>', 200)
 
@@ -97,29 +95,7 @@ def receiveCSRFForm():
 
 
 
-# #CORS
-# @app.route('/cors', methods=['GET'])
-# def corsPage():
-# 	with open('./src/cors.src', 'r') as file:
-# 		page = file.read()
-# 		response = make_response(page, 200)
-# 		response.mimetype = 'text/html'
-
-# 	return response
-
-
-# @app.route('/corsPost', methods=['POST'])
-# def receiveCORSPost():
-# 	firstName = request.json.get('fname')
-# 	lastName = request.json.get('lname')
-# 	print("Got names: " + firstName + ' ' + lastName)
-# 	response = make_response('Welcome ' + firstName + ' ' + lastName + 
-# 		'<br><a href="javascript:history.back()">Go Back</a>', 200)
-
-# 	return response
-
-
-#CORS
+#Fake JSON
 @app.route('/fakeJson', methods=['GET'])
 def corsPage():
 	with open('./src/fakeJson.src', 'r') as file:
@@ -132,27 +108,16 @@ def corsPage():
 
 @app.route('/fakeJsonPost', methods=['POST'])
 def receiveFakeJsonPost():
-	# data1 = request.get_data()
-	# print("** Raw data: " + data1)
+	rawData = request.get_data().decode()
+	jsonString = rawData[:-3]
+	properJson = json.loads(jsonString)
+	firstName = properJson["fname"]
+	lastName = properJson["lname"]
 
-	# data = jsonify(request.get_json(force=True))
-	# data = jsonify(request.get_data(force=True))
-	data = request.get_data().decode()
-	print("** Raw data: " + data)
-	parsed = jsonify(data)
+	response = make_response('Welcome ' + firstName + 
+		'<br><a href="javascript:history.back()">Go Back</a>', 200)
 
-	print(type(parsed))
-
-	# firstName = data.json.get('fname')
-	# # lastName = request.json.get('lname')
-	# firstName = parsed.json.g('fname')
-	# # # lastName = request.json.get('lname')
-
-	# print("Got name: " + firstName)
-	# response = make_response('Welcome ' + firstName + 
-	# 	'<br><a href="javascript:history.back()">Go Back</a>', 200)
-
-	return 200
+	return response
 
 
 

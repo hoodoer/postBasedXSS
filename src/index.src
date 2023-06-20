@@ -4,16 +4,36 @@
 	<Title>XSS Lab</Title>
 	<h1>POST Based XSS Lab</h1>
 	<p>Lab to demonstrate ways to make reflected POST based XSS
-	Exploitable.</p>
-
+	Exploitable. <br>
+	Assumes you have Burp Suite, preferably the pro license.</p>
 
 	<p><a href="/methodTamper">1 - Method Tampering</a></p>
 	<p><a href="/csrf">2 - CSRF</a></p>
-	<p><a href="/fakeJson">3 - Fake JSON CSRF</a></p>
+	<p><a href="/fakeJson">3 - Spoofed JSON CSRF</a></p>
 
+	<br><br>
+	<p>Once you have a good feel for ways to make POST based reflected XSS exploitable, why not dig into<br>
+	making real payloads? <br>
+	No attacker is going to pop open an alert box. <br><br>
 
-	<br><br><br><br>
-	<p><a href="https://twitter.com/hoodoer">@hoodoer</a></p>
+	We have a webinar teaching how to develop weaponized XSS payloads here (youtube link):
+	<p><a href="https://youtu.be/NBWYRLnWDkM" target="_blank">Popping Shells Instead of Alert Boxes - Weaponizing XSS for Fun and Profit</a></p>
+	<br>
+	We also have a free workshop that mirrors that webinar. It gives you hands on experience writing<br>
+	weaponized XSS payloads. It's a downloadable VM with the tools preconfigured, the same vulnerable <br>
+	web application from the webinar, and all the code snippets needed to build up more and more complex	payloads. <br><br>
+	You can download the workshop development guide here:
+	<p><a href="https://download.hoodoer.com/guide.pdf" target="_blank">Workshop Development Guide</a></p>
+	<br>
+	The workshop VM can be downloaded here:<br>
+	<p><a href="https://download.hoodoer.com/vm.ova" target="_blank">Workshop VM</a></p>
+
+	 
+	</p>
+
+	<br><br><br>
+	<p><a href="https://twitter.com/hoodoer" target="_blank">@hoodoer</a></p>
+	<p><a href="mailto:Drew.Kirkpatrick@TrustedSec.com">Drew.Kirkpatrick@TrustedSec.com</a></p>
 
 </body>
 </html>

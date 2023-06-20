@@ -42,7 +42,7 @@
 
 	<p><a href="/">Home</a></p>
 
-	<button type="button" class="collapsible">Open Tutorial</button>
+	<button type="button" class="collapsible" id="tutorialButton">Open Tutorial</button>
 	<div class="content">
 		<p>When you fill out the form and submit it, the form is submitted using a POST request.<br>
 		The inputs are reflected in the response, so you can submit a name such as <br>
@@ -58,10 +58,10 @@
 		so it is vulnerable to traditional CSRF attacks. We can use a CSRF attack to submit our XSS payload<br><br>
 
 		The easiest way to craft this attack is again getting our form POST request into Burp.<br>
-		<image src="./static/csrfFormPost1.png"><br>
+		<image src="./static/csrfFormPost1.png"><br><br><br>
 		Right click on the request, select <b>Engagement tools</b> and then <b>Generate CSRF PoC</b><br>
-		<image src="./static/csrfPocGeneration1.png"><br>
-		<image src="./static/poc1.png"><br>
+		<image src="./static/csrfPocGeneration1.png"><br><br>
+		<image src="./static/poc1.png"><br><br><br>
 
 		Burp suite (pro version at least) will generate a CSRF webpage that will submit the malicious<br>
 		XSS payload for you as a POST request.<br>
@@ -69,7 +69,7 @@
 	</div>
 
 
-	<h2>XSS Form:</h2>
+	<h2>CSRF XSS Form:</h2>
 	<form action="/csrfPostForm" method="post">
 	  <label for="fname">First name:</label>
 	  <input type="text" id="fname" name="fname"><br><br>
@@ -88,8 +88,10 @@
 	    var content = this.nextElementSibling;
 	    if (content.style.display === "block") {
 	      content.style.display = "none";
+	      document.getElementById("tutorialButton").innerHTML = "Open Tutorial";
 	    } else {
 	      content.style.display = "block";
+	      document.getElementById("tutorialButton").innerHTML = "Close Tutorial";
 	    }
 	  });
 	}

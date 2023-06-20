@@ -42,7 +42,7 @@
 
 	<p><a href="/">Home</a></p>
 
-	<button type="button" class="collapsible">Open Tutorial</button>
+	<button type="button" class="collapsible" id="tutorialButton">Open Tutorial</button>
 	<div class="content">
 		<p>This example is a very special case you likely won't see in the wild very often,<br>
 	    but I have seen this and exploited it before on client engagements. <br><br>
@@ -68,68 +68,25 @@
 		It should be rare to find such a configuration. But you do, you can then configure <br>
 		your form post so that it sends <i>almost</i> JSON. Let's look at a normal form POST<br>
 
-		<image src="./static/formPost1.png"><br>
+		<image src="./static/formPost1.png"><br><br><br>
 
 		Now let's look at what a JSON formatted POST looks like:
 
-		<image src="./static/jsonPost1.png"><br>
+		<image src="./static/jsonPost1.png"><br><br><br>
 		We can see the formatting of the parameters is quite different from a traditional<br>
 		form POST. We can almost perfectly reproduce this in a form POST however. <br>
 		We can do this by putting the entire content of our desired JSON in the parameter name<br>
 		and leaving the value field empty. And only sending a single parameter.<br><br>
 		This attack POC looks similar to the following:<br>
-		<image src="./static/spoofedJson1.png"><br>
+		<image src="./static/spoofedJson1.png"><br><br><br>
 		Let's see what the request made from this page looks like:<br>
-		<image src="./static/trailingEquals.png"><br>
+		<image src="./static/trailingEquals.png"><br><br><br>
 		This is pretty close to a valid JSON POST. We have the wrong content-type and a random<br>
-		trailing '=', but it's close. 
+		trailing '=', but it's close. You can create a CSRF attack that includes an XSS payload in the<br>
+		fake JSON data.<br>
 
-
-
-
-
-		This payload does end up getting URL encoded, so what the actual request looks like is:<br>
-		<image src="./static/urlEncoded1.png"><br>
-		Let's decode this with Burp decoder to see what this actual value is. Select the body<br>
-		of the request, right click, and choose to send to Burp Decoder. <br>
-		<image src="./static/jsonDecoded1.png"><br>
-		This is pretty darned close to valid JSON. The content-type is completely wrong<br>
-		but occasionally you will find an application that isn't enforcing the content-type. <br>
-
-
-
-
-
-
-
-
-		<p>Unlike the prior two tutorials where a form POST allowed us to send our XSS payload, <br>
-		many applications send user inputs to the server in JSON. An HTML form cannot generate JSON<br>
-		so form based attacks will not work here. To create valid JSON we need JavaScript. We have<br>
-		quite the chicken and egg problem here, we can't inject our malicious JavaScript without JSON<br>
-		which we can't generate without... JavaScript.<br><br>
-
-			When you fill out the form and submit it, the form is submitted using a POST request.<br>
-		The inputs are reflected in the response, so you can submit a name such as <br>
-		<b>Joe&lt;script&gt;alert(1)&lt;/script&gt;</b><br>
-		and the page will pop open an alert box, indicating an XSS vulnerability.<br><br>
-		The issue with POST based reflected XSS vulnerabilities is that they're hard to exploit.<br>
-		I would need to convince a user to type the payload into the form and submit it to get my payload running.<br><br>
-		That is not a very practical exploit path. <br><br>
-		Unlike the <b>Method Tampering</b> tutorial, this endpoint specificaly requires the <br>
-		submission to be a POST request. <br><br>
-		We can still exploit this POST XSS vulnerability by crafting<br>
-		a CSRF attack to submit our payload. The form POST in question does <b>not</b> implement anti-CSRF tokens<br>
-		so it is vulnerable to traditional CSRF attacks. We can use a CSRF attack to submit our XSS payload<br><br>
-
-		The easiest way to craft this attack is again getting our form POST request into Burp.<br>
-		<image src="./static/csrfFormPost1.png"><br>
-		Right click on the request, select <b>Engagement tools</b> and then <b>Generate CSRF PoC</b><br>
-		<image src="./static/csrfPocGeneration1.png"><br>
-		<image src="./static/poc1.png"><br>
-
-		Burp suite (pro version at least) will generate a CSRF webpage that will submit the malicious<br>
-		XSS payload for you as a POST request.<br>
+		<image src="./static/csrfJson1.png"><br><br><br>
+		Running this CSRF attack will pop open the alert box. 
 	</p>
 	</div>
 
@@ -187,8 +144,10 @@
 	    var content = this.nextElementSibling;
 	    if (content.style.display === "block") {
 	      content.style.display = "none";
+	      document.getElementById("tutorialButton").innerHTML = "Open Tutorial";
 	    } else {
 	      content.style.display = "block";
+	      document.getElementById("tutorialButton").innerHTML = "Close Tutorial";
 	    }
 	  });
 	}
