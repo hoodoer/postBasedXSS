@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+	/* Style the button that is used to open and close the collapsible content */
+	.collapsible {
+	  background-color: #eee;
+	  color: #444;
+	  cursor: pointer;
+	  padding: 18px;
+	  width: 100%;
+	  border: none;
+	  text-align: left;
+	  outline: none;
+	  font-size: 15px;
+	}
+
+	/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+	.active, .collapsible:hover {
+	  background-color: #ccc;
+	}
+
+	/* Style the collapsible content. Note: hidden by default */
+	.content {
+	  padding: 0 18px;
+	  display: none;
+	  overflow: hidden;
+	  background-color: #f1f1f1;
+	}
+
+	img {
+  		border: 3px solid #555;
+  		width: 80vw;
+	}
+
+</style>
+</head>
+<body>
+	<Title>XSS Lab - Fake JSON</Title>
+	<h1>POST Based XSS Lab - CSRF to spoof JSON</h1>
+	<p>Lab to demonstrate using a CSRF vulnerability to spoof JSON input to exploit reflected post based XSS.</p>
+
+	<p><a href="/">Home</a></p>
+
+	<button type="button" class="collapsible">Open Tutorial</button>
+	<div class="content">
+		<p>This example is a very special case you likely won't see in the wild very often,<br>
+	    but I have seen this and exploited it before on client engagements. <br><br>
+
+		Unlike the prior two tutorials where a form POST allowed us to send our XSS payload, <br>
+		many applications send user inputs to the server in JSON. An HTML form cannot generate JSON<br>
+		so form based attacks will not work here. To create valid JSON we need JavaScript. We have<br>
+		quite the chicken and egg problem here, we can't inject our malicious JavaScript without JSON<br>
+		which we can't generate without... JavaScript.<br><br>
+
+		Or maybe we can come close. The big dependency for this attack to work is that the<br>
+		server endpoint receiving the JSON POST is not enforcing the content-type as it should.<br><br>
+
+		In a typical JSON POST, the JavaScript creating that POST will set the content-type to <br><b>application/json</b><br><br>
+
+		We can use a traditional form based CSRF attack to create JSON-ish looking inputs, but we can't change <br>
+		the content-type without JavaScript, which we're not allowed to do on our third-party CSRF attack<br>
+		website in anyway that will interact with another site. <br><br>
+
+		So this attack will only work against a JSON POST endpoint that processes the JSON input<br>
+		even if the content-type is wrong, specifically using the content-type of <br><b>application/x-www-form-urlencoded</b><br><br>
+
+		It should be rare to find such a configuration. But you do, you can then configure <br>
+		your form post so that it sends <i>almost</i> JSON. Let's look at a normal form POST<br>
+
+		<image src="./static/formPost1.png"><br>
+
+		Now let's look at what a JSON formatted POST looks like:
+
+		<image src="./static/jsonPost1.png"><br>
+		We can see the formatting of the parameters is quite different from a traditional<br>
+		form POST. We can almost perfectly reproduce this in a form POST however. <br>
+		We can do this by putting the entire content of our desired JSON in the parameter name<br>
+		and leaving the value field empty. And only sending a single parameter.<br><br>
+		This attack POC looks similar to the following:<br>
+		<image src="./static/spoofedJson1.png"><br>
+		Let's see what the request made from this page looks like:<br>
+		<image src="./static/trailingEquals.png"><br>
+		This is pretty close to a valid JSON POST. We have the wrong content-type and a random<br>
+		trailing '=', but it's close. 
+
+
+
+
+
+		This payload does end up getting URL encoded, so what the actual request looks like is:<br>
+		<image src="./static/urlEncoded1.png"><br>
+		Let's decode this with Burp decoder to see what this actual value is. Select the body<br>
+		of the request, right click, and choose to send to Burp Decoder. <br>
+		<image src="./static/jsonDecoded1.png"><br>
+		This is pretty darned close to valid JSON. The content-type is completely wrong<br>
+		but occasionally you will find an application that isn't enforcing the content-type. <br>
+
+
+
+
+
+
+
+
+		<p>Unlike the prior two tutorials where a form POST allowed us to send our XSS payload, <br>
+		many applications send user inputs to the server in JSON. An HTML form cannot generate JSON<br>
+		so form based attacks will not work here. To create valid JSON we need JavaScript. We have<br>
+		quite the chicken and egg problem here, we can't inject our malicious JavaScript without JSON<br>
+		which we can't generate without... JavaScript.<br><br>
+
+			When you fill out the form and submit it, the form is submitted using a POST request.<br>
+		The inputs are reflected in the response, so you can submit a name such as <br>
+		<b>Joe&lt;script&gt;alert(1)&lt;/script&gt;</b><br>
+		and the page will pop open an alert box, indicating an XSS vulnerability.<br><br>
+		The issue with POST based reflected XSS vulnerabilities is that they're hard to exploit.<br>
+		I would need to convince a user to type the payload into the form and submit it to get my payload running.<br><br>
+		That is not a very practical exploit path. <br><br>
+		Unlike the <b>Method Tampering</b> tutorial, this endpoint specificaly requires the <br>
+		submission to be a POST request. <br><br>
+		We can still exploit this POST XSS vulnerability by crafting<br>
+		a CSRF attack to submit our payload. The form POST in question does <b>not</b> implement anti-CSRF tokens<br>
+		so it is vulnerable to traditional CSRF attacks. We can use a CSRF attack to submit our XSS payload<br><br>
+
+		The easiest way to craft this attack is again getting our form POST request into Burp.<br>
+		<image src="./static/csrfFormPost1.png"><br>
+		Right click on the request, select <b>Engagement tools</b> and then <b>Generate CSRF PoC</b><br>
+		<image src="./static/csrfPocGeneration1.png"><br>
+		<image src="./static/poc1.png"><br>
+
+		Burp suite (pro version at least) will generate a CSRF webpage that will submit the malicious<br>
+		XSS payload for you as a POST request.<br>
+	</p>
+	</div>
+
+
+		<h2>JSON Based XSS Form:</h2>
+	<form>
+	  <label for="fname">First name:</label>
+	  <input type="text" id="fname" name="fname"><br><br>
+	  <label for="lname">Last name:</label>
+	  <input type="text" id="lname" name="lname"><br><br>
+	  <input type="submit" value="Submit">
+	</form>
+
+	<script>
+		async function handleSubmit(events)
+		{
+			event.preventDefault();
+			const formData  = new FormData(event.target);
+			const firstName = formData.get('fname');
+			const lastName  = formData.get('lname');
+
+			console.log("Got form submit: "  + firstName + " " + lastName);
+
+			const object = {fname: firstName, lname: lastName};
+
+			const response = await fetch('/fakeJsonPost', {
+				method: 'POST',
+				body: JSON.stringify(object),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}).then(response=>response.text()).then(data=>
+			{
+				console.log(data);
+				document.write(data);
+			});
+
+
+		}
+
+		const form = document.querySelector('form');
+		form.addEventListener('submit', handleSubmit);
+
+	</script>
+
+
+
+	<script>
+	var coll = document.getElementsByClassName("collapsible");
+	var i;
+
+	for (i = 0; i < coll.length; i++) {
+	  coll[i].addEventListener("click", function() {
+	    this.classList.toggle("active");
+	    var content = this.nextElementSibling;
+	    if (content.style.display === "block") {
+	      content.style.display = "none";
+	    } else {
+	      content.style.display = "block";
+	    }
+	  });
+	}
+	</script>
+
+</body>
+</html>

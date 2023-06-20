@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 
-from flask import Flask, make_response, request
-from flask_cors import CORS
+from flask import Flask, make_response, request, jsonify
 
 
 app = Flask(__name__)
-CORS (app)
 
 
 
@@ -99,10 +97,32 @@ def receiveCSRFForm():
 
 
 
+# #CORS
+# @app.route('/cors', methods=['GET'])
+# def corsPage():
+# 	with open('./src/cors.src', 'r') as file:
+# 		page = file.read()
+# 		response = make_response(page, 200)
+# 		response.mimetype = 'text/html'
+
+# 	return response
+
+
+# @app.route('/corsPost', methods=['POST'])
+# def receiveCORSPost():
+# 	firstName = request.json.get('fname')
+# 	lastName = request.json.get('lname')
+# 	print("Got names: " + firstName + ' ' + lastName)
+# 	response = make_response('Welcome ' + firstName + ' ' + lastName + 
+# 		'<br><a href="javascript:history.back()">Go Back</a>', 200)
+
+# 	return response
+
+
 #CORS
-@app.route('/cors', methods=['GET'])
+@app.route('/fakeJson', methods=['GET'])
 def corsPage():
-	with open('./src/cors.src', 'r') as file:
+	with open('./src/fakeJson.src', 'r') as file:
 		page = file.read()
 		response = make_response(page, 200)
 		response.mimetype = 'text/html'
@@ -110,15 +130,30 @@ def corsPage():
 	return response
 
 
-@app.route('/corsPost', methods=['POST'])
-def receiveCORSPost():
-	firstName = request.json.get('fname')
-	lastName = request.json.get('lname')
-	print("Got names: " + firstName + ' ' + lastName)
-	response = make_response('Welcome ' + firstName + ' ' + lastName + 
-		'<br><a href="javascript:history.back()">Go Back</a>', 200)
+@app.route('/fakeJsonPost', methods=['POST'])
+def receiveFakeJsonPost():
+	# data1 = request.get_data()
+	# print("** Raw data: " + data1)
 
-	return response
+	# data = jsonify(request.get_json(force=True))
+	# data = jsonify(request.get_data(force=True))
+	data = request.get_data().decode()
+	print("** Raw data: " + data)
+	parsed = jsonify(data)
+
+	print(type(parsed))
+
+	# firstName = data.json.get('fname')
+	# # lastName = request.json.get('lname')
+	# firstName = parsed.json.g('fname')
+	# # # lastName = request.json.get('lname')
+
+	# print("Got name: " + firstName)
+	# response = make_response('Welcome ' + firstName + 
+	# 	'<br><a href="javascript:history.back()">Go Back</a>', 200)
+
+	return 200
+
 
 
 

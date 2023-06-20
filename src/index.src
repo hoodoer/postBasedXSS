@@ -6,11 +6,14 @@
 	<p>Lab to demonstrate ways to make reflected POST based XSS
 	Exploitable.</p>
 
+
 	<p><a href="/methodTamper">1 - Method Tampering</a></p>
 	<p><a href="/csrf">2 - CSRF</a></p>
-	<p><a href="/cors">3 - CORS</a></p>
-	<p><a href="/fakeJson">4 - Fake JSON CSRF</a></p>
+	<p><a href="/fakeJson">3 - Fake JSON CSRF</a></p>
 
+
+	<br><br><br><br>
+	<p><a href="https://twitter.com/hoodoer">@hoodoer</a></p>
 
 </body>
 </html>

@@ -37,8 +37,8 @@
 </head>
 <body>
 	<Title>XSS Lab - CSRF</Title>
-	<h1>POST Based XSS Lab - CORS</h1>
-	<p>Lab to demonstrate using a CORS vulnerability to exploit reflected post based XSS.</p>
+	<h1>POST Based XSS Lab - CSRF</h1>
+	<p>Lab to demonstrate using a CSRF vulnerability to exploit reflected post based XSS.</p>
 
 	<p><a href="/">Home</a></p>
 
