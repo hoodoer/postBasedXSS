@@ -1,5 +1,5 @@
 # postBasedXSS
-Demo of some ways to practically exploit post based reflected XSS
+Demo/lab of some ways to practically exploit post based reflected XSS
 
 
 
